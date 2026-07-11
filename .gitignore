@@ -1,0 +1,53 @@
+
+### 2. .gitignore
+
+```bash
+# Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.metadata/
+
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+logs/
+
+# Test reports
+target/surefire-reports/
+target/cucumber-reports/
+target/test-output/
+
+# Environment
+*.properties
+.env
+application.properties
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
