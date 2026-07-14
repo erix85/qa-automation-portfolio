@@ -1,68 +1,35 @@
+# 🧪 QA Automation Portfolio - Erick Cuevas
 
-# QA Automation Portfolio - Erick Cuevas
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/tu-perfil)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/erix85)
+[![Java](https://img.shields.io/badge/Java-17-orange)](https://www.java.com/)
+[![Selenium](https://img.shields.io/badge/Selenium-4.20.0-green)](https://www.selenium.dev/)
+[![Cucumber](https://img.shields.io/badge/Cucumber-7.15.0-brightgreen)](https://cucumber.io/)
 
-## Sobre Mí
+## 👨‍💻 Sobre Mí
 
-Ingeniero QA con 8 años de experiencia en el sector bancario y financiero. Especialista en automatización de pruebas con Java, Python, Selenium, Cucumber y Robot Framework.
+Ingeniero QA con **7 años de experiencia** en aseguramiento de calidad de software, especializado en el **sector bancario y financiero**. He trabajado en proyectos críticos para **BancoEstado, Banco Chile, Scotiabank, BCI y Falabella**.
 
+### 🏆 Logros Destacados
 
-## Estructura del Portafolio
+- **+30%** de eficiencia en pruebas de regresión (Falabella)
+- **Certificación** del portal CasaVerso (BancoEstado)
+- **Migración Cloud** On-premises → Cloud (Falabella Colombia)
+- **Implementación** de frameworks en Java, Python, Robot Framework
 
-| Proyecto | Tecnologías | Descripción |
-|----------|-------------|-------------|
-| Java + Selenium + Cucumber | Java, Selenium, Cucumber, Maven | Framework BDD para pruebas web bancarias |
-| Python + Behave | Python, Behave, Selenium | Pruebas BDD para portales financieros |
-| Robot Framework | Robot Framework, Selenium | Keyword-driven testing |
-| JMeter Performance | JMeter | Pruebas de carga y estrés |
-| Postman API Tests | Postman, Newman | Pruebas de API REST |
+### 🛠️ Stack Tecnológico
 
+| Categoría | Tecnologías |
+|-----------|-------------|
+| **Lenguajes** | Java 17, Python, SQL |
+| **Automatización Web** | Selenium WebDriver, Cucumber, Behave, Robot Framework |
+| **Automatización Mobile** | Appium |
+| **Pruebas de API** | Postman, Newman, SOAP UI |
+| **Pruebas de Performance** | JMeter, Locust |
+| **Pruebas de Seguridad** | Fortify, BlackDuck |
+| **CI/CD** | Jenkins, GitHub Actions |
+| **Gestión** | Jira, Confluence, ALM |
 
+---
 
-Requisitos técnicos:
-
-Maven para gestión de dependencias (pom.xml)
-
-Page Object Model - Estructura de carpetas con pages/
-
-Cucumber con archivos .feature en Gherkin
-
-TestNG o JUnit como test runner
-
-WebDriverManager o drivers configurados
-
-Reporting (Allure, Extent Reports o HTML)
-
-Estructura específica para Java + Cucumber:
-
-text
-selenium-java-cucumber/
-├── pom.xml
-├── src/
-│   ├── main/java/com/portafolio/
-│   │   ├── pages/
-│   │   │   ├── LoginPage.java
-│   │   │   ├── DashboardPage.java
-│   │   │   └── TransferPage.java
-│   │   ├── utils/
-│   │   │   ├── DriverManager.java
-│   │   │   └── TestDataReader.java
-│   │   └── config/
-│   │       └── ConfigReader.java
-│   └── test/
-│       ├── java/com/portafolio/
-│       │   ├── runner/
-│       │   │   └── TestRunner.java
-│       │   ├── steps/
-│       │   │   ├── LoginSteps.java
-│       │   │   ├── TransferSteps.java
-│       │   │   └── Hooks.java
-│       │   └── utils/
-│       └── resources/
-│           ├── features/
-│           │   ├── login.feature
-│           │   └── transfer.feature
-│           └── config.properties
-└── README.md
-La aplicación a testear:
-
-Puedes usar SauceDemo (saucedemo.com) o The Internet (the-internet.herokuapp.com) como aplicaciones públicas de práctica, ya que son reconocidas por reclutadores en el mundo QA
+## 📁 Estructura del Portafolio
