@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Portafolio QA - Banca y Finanzas" parallel="none">
-    <test name="Pruebas de Autenticación">
+<suite name="QA Automation Portfolio Suite" verbose="1" parallel="methods" thread-count="2">
+
+    <test name="Cucumber BDD Tests">
         <classes>
             <class name="com.portafolio.runner.TestRunner"/>
         </classes>
     </test>
+
 </suite>

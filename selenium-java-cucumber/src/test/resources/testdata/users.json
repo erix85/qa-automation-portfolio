@@ -1,0 +1,20 @@
+{
+  "validUser": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "email": "standard@example.com",
+    "role": "STANDARD"
+  },
+  "lockedUser": {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "email": "locked@example.com",
+    "role": "LOCKED"
+  },
+  "invalidUser": {
+    "username": "invalid_user",
+    "password": "wrong_password",
+    "email": "invalid@example.com",
+    "role": "INVALID"
+  }
+}

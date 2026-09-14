@@ -1,71 +1,88 @@
 package com.portafolio.pages;
 
-import java.time.Duration;
+import org.openqa.selenium.By;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+/**
+ * Page Object para la página de Login de SauceDemo.
+ *
+ * <p><b>Refactorizado:</b> ahora hereda de {@link BasePage}, lo que elimina
+ * la duplicación de operaciones básicas (click, type, getText) y centraliza
+ * las esperas en {@link com.portafolio.utils.WaitUtils}.</p>
+ */
+public class LoginPage extends BasePage {
 
-import com.portafolio.utils.DriverManager;
+    // ═══════════════════ LOCATORS ═══════════════════
+    private static final By USERNAME_FIELD = By.id("user-name");
+    private static final By PASSWORD_FIELD = By.id("password");
+    private static final By LOGIN_BUTTON = By.id("login-button");
+    private static final By ERROR_MESSAGE = By.className("error-message-container");
+    private static final By LOGO = By.className("app_logo");
 
-public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    // Elementos de la página
-    @FindBy(id = "user-name")
-    private WebElement usernameInput;
-
-    @FindBy(id = "password")
-    private WebElement passwordInput;
-
-    @FindBy(id = "login-button")
-    private WebElement loginButton;
-
-    @FindBy(className = "error-message-container")
-    private WebElement errorMessage;
-
-    @FindBy(className = "app_logo")
-    private WebElement logo;
+    private static final String URL = "https://www.saucedemo.com/";
 
     public LoginPage() {
-        this.driver = DriverManager.getDriver();
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        PageFactory.initElements(driver, this);
+        super();
+        log.debug("LoginPage instanciada");
     }
 
+    // ═══════════════════ ACCIONES ═══════════════════
+
     public void navigateTo() {
-        driver.get("https://www.saucedemo.com/");
+        navigateTo(URL);
+        waitForLoad();
     }
 
     public void enterUsername(String username) {
-        wait.until(ExpectedConditions.visibilityOf(usernameInput));
-        usernameInput.clear();
-        usernameInput.sendKeys(username);
+        type(USERNAME_FIELD, username);
     }
 
     public void enterPassword(String password) {
-        passwordInput.clear();
-        passwordInput.sendKeys(password);
+        type(PASSWORD_FIELD, password);
     }
 
     public void clickLogin() {
-        loginButton.click();
+        click(LOGIN_BUTTON);
     }
 
+    /**
+     * Método de conveniencia: agrupa las acciones del login en una sola llamada.
+     * Ideal para mantener los Steps legibles.
+     */
+    public void login(String username, String password) {
+        enterUsername(username);
+        enterPassword(password);
+        clickLogin();
+    }
+
+    // ═══════════════════ CONSULTAS ═══════════════════
+
     public String getErrorMessage() {
-        wait.until(ExpectedConditions.visibilityOf(errorMessage));
-        return errorMessage.getText();
+        return getText(ERROR_MESSAGE);
     }
 
     public boolean isLogoDisplayed() {
-        return logo.isDisplayed();
+        return isDisplayed(LOGO);
     }
 
     public boolean isLoginButtonDisplayed() {
-        return loginButton.isDisplayed();
+        return isDisplayed(LOGIN_BUTTON);
+    }
+
+    // ═══════════════════ IMPLEMENTACIÓN DE BasePage ═══════════════════
+
+    @Override
+    public boolean isPageLoaded() {
+        return isDisplayed(LOGO) && isDisplayed(LOGIN_BUTTON);
+    }
+
+    /**
+     * Espera a que la página de login esté cargada.
+     * Se usa internamente en {@link #navigateTo()}.
+     */
+    private void waitForLoad() {
+        if (!isPageLoaded()) {
+            throw new IllegalStateException("La página de login no se cargó correctamente");
+        }
+        log.info("✅ Página de login cargada");
     }
 }

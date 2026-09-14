@@ -24,20 +24,27 @@ Framework de automatización con **Java, Selenium y Cucumber** para pruebas func
 
 ## 📁 Estructura del Proyecto
 
-selenium-java-cucumber/
-├── pom.xml
-├── src/
-│ ├── main/
-│ │ └── java/com/portafolio/
-│ │ ├── pages/ # Page Object Model
-│ │ └── utils/ # Helpers
-│ └── test/
-│ ├── java/com/portafolio/
-│ │ ├── runner/ # Test Runner
-│ │ └── steps/ # Step Definitions
-│ └── resources/
-│ └── features/ # Archivos .feature
-└── testng.xml
+├── selenium-java-cucumber/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/portfolio/
+│   │   │   │   ├── config/         → ConfigReader, Environment
+│   │   │   │   ├── models/         → ⭐ NUEVO: User, Product, etc.
+│   │   │   │   ├── pages/          → BasePage, LoginPage, DashboardPage
+│   │   │   │   └── utils/          → DriverManager, TestDataReader
+│   │   │   └── resources/
+│   │   │       └── log4j2.xml
+│   │   └── test/
+│   │       ├── java/com/portfolio/
+│   │       │   ├── runner/         → TestRunner
+│   │       │   └── steps/          → Hooks, LoginSteps
+│   │       └── resources/          → ⭐ NUEVO
+│   │           ├── features/       → login.feature
+│   │           ├── testdata/       → users.json, products.json
+│   │           └── config/         → qa.properties
+│   ├── pom.xml
+│   ├── README.md
+│   └── testing.xml
 
 text
 
