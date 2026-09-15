@@ -1,24 +1,16 @@
 package com.portafolio.pages;
 
-import org.openqa.selenium.By;
+import com.portafolio.locators.LoginLocators;
 
 /**
- * Page Object para la página de Login de SauceDemo.
+ * Page Object para el modal de Login de DemoBlaze.
  *
- * <p><b>Refactorizado:</b> ahora hereda de {@link BasePage}, lo que elimina
- * la duplicación de operaciones básicas (click, type, getText) y centraliza
- * las esperas en {@link com.portafolio.utils.WaitUtils}.</p>
+ * <p>El login no es una página separada, sino un modal que aparece
+ * sobre la home. Este Page Object se encarga de sus acciones.</p>
+ *
+ * @author Erick
  */
 public class LoginPage extends BasePage {
-
-    // ═══════════════════ LOCATORS ═══════════════════
-    private static final By USERNAME_FIELD = By.id("user-name");
-    private static final By PASSWORD_FIELD = By.id("password");
-    private static final By LOGIN_BUTTON = By.id("login-button");
-    private static final By ERROR_MESSAGE = By.className("error-message-container");
-    private static final By LOGO = By.className("app_logo");
-
-    private static final String URL = "https://www.saucedemo.com/";
 
     public LoginPage() {
         super();
@@ -27,26 +19,20 @@ public class LoginPage extends BasePage {
 
     // ═══════════════════ ACCIONES ═══════════════════
 
-    public void navigateTo() {
-        navigateTo(URL);
-        waitForLoad();
-    }
-
     public void enterUsername(String username) {
-        type(USERNAME_FIELD, username);
+        type(LoginLocators.USERNAME_FIELD, username);
     }
 
     public void enterPassword(String password) {
-        type(PASSWORD_FIELD, password);
+        type(LoginLocators.PASSWORD_FIELD, password);
     }
 
     public void clickLogin() {
-        click(LOGIN_BUTTON);
+        click(LoginLocators.LOGIN_BUTTON);
     }
 
     /**
-     * Método de conveniencia: agrupa las acciones del login en una sola llamada.
-     * Ideal para mantener los Steps legibles.
+     * Método de conveniencia: completa el formulario y confirma el login.
      */
     public void login(String username, String password) {
         enterUsername(username);
@@ -56,33 +42,9 @@ public class LoginPage extends BasePage {
 
     // ═══════════════════ CONSULTAS ═══════════════════
 
-    public String getErrorMessage() {
-        return getText(ERROR_MESSAGE);
-    }
-
-    public boolean isLogoDisplayed() {
-        return isDisplayed(LOGO);
-    }
-
-    public boolean isLoginButtonDisplayed() {
-        return isDisplayed(LOGIN_BUTTON);
-    }
-
-    // ═══════════════════ IMPLEMENTACIÓN DE BasePage ═══════════════════
-
     @Override
     public boolean isPageLoaded() {
-        return isDisplayed(LOGO) && isDisplayed(LOGIN_BUTTON);
-    }
-
-    /**
-     * Espera a que la página de login esté cargada.
-     * Se usa internamente en {@link #navigateTo()}.
-     */
-    private void waitForLoad() {
-        if (!isPageLoaded()) {
-            throw new IllegalStateException("La página de login no se cargó correctamente");
-        }
-        log.info("✅ Página de login cargada");
+        return isDisplayed(LoginLocators.MODAL)
+            && isDisplayed(LoginLocators.USERNAME_FIELD);
     }
 }

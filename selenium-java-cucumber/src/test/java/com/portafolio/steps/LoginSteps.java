@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.portafolio.models.User;
-import com.portafolio.pages.DashboardPage;
+import com.portafolio.pages.HomePage;
 import com.portafolio.pages.LoginPage;
 import com.portafolio.utils.TestDataReader;
 
 import io.cucumber.java.es.Cuando;
-import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Entonces;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Epic;
@@ -20,11 +19,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 
 /**
- * Step Definitions para los escenarios de autenticación.
+ * Step Definitions específicos del feature de login.
  *
- * <p><b>Anotaciones Allure:</b> {@code @Epic}, {@code @Feature}, {@code @Story}
- * y {@code @Severity} enriquecen el reporte con jerarquía funcional y criticidad,
- * permitiendo filtrar y agrupar resultados en Allure.</p>
+ * <p><b>Nota:</b> los steps compartidos (navegación, validación de alerts,
+ * etc.) viven en {@link CommonSteps}. Aquí solo los específicos del login.</p>
  *
  * @author Erick
  */
@@ -34,35 +32,12 @@ public class LoginSteps {
 
     private static final Logger log = LoggerFactory.getLogger(LoginSteps.class);
 
-    private final LoginPage loginPage;
-    private final DashboardPage dashboardPage;
-
-    public LoginSteps() {
-        this.loginPage = new LoginPage();
-        this.dashboardPage = new DashboardPage();
-        log.debug("LoginSteps instanciado");
-    }
-
-    // ═══════════════════ GIVEN ═══════════════════
-
-    @Dado("que el usuario está en la página de login")
-    @Story("Acceso al portal")
-    @Severity(SeverityLevel.BLOCKER)
-    public void usuarioEnPaginaLogin() {
-        log.info("📋 Given: usuario en página de login");
-
-        Allure.step("Navegar a la página de login de SauceDemo", () -> {
-            loginPage.navigateTo();
-        });
-
-        Allure.step("Verificar que el logo es visible", () -> {
-            Assert.assertTrue(loginPage.isLogoDisplayed(), "El logo no está visible");
-        });
-    }
+    private final HomePage homePage = new HomePage();
+    private final LoginPage loginPage = new LoginPage();
 
     // ═══════════════════ WHEN ═══════════════════
 
-    @Cuando("el usuario {string} inicia sesión")
+    @Cuando("el usuario {string} inicia sesión con su contraseña")
     @Story("Ingreso de credenciales")
     @Severity(SeverityLevel.CRITICAL)
     public void elUsuarioIniciaSesion(String userKey) {
@@ -71,7 +46,7 @@ public class LoginSteps {
         // ✅ DTO: datos tipados desde JSON
         User user = TestDataReader.getUser(userKey);
 
-        // Adjuntar el JSON del usuario al reporte de Allure (evidencia)
+        // Evidencia en Allure
         Allure.addAttachment(
                 "Datos del usuario: " + userKey,
                 "application/json",
@@ -86,38 +61,27 @@ public class LoginSteps {
             loginPage.enterPassword(user.getPassword());
         });
 
-        Allure.step("Hacer click en el botón Login", () -> {
+        Allure.step("Hacer click en el botón Log in", () -> {
             loginPage.clickLogin();
         });
     }
 
     // ═══════════════════ THEN ═══════════════════
 
-    @Entonces("el sistema redirige al dashboard")
+    @Entonces("debería ver el mensaje de bienvenida {string}")
     @Story("Acceso exitoso")
     @Severity(SeverityLevel.BLOCKER)
-    public void sistemaRedirigeDashboard() {
-        log.info("✅ Then: validando redirección al dashboard");
+    public void deberiaVerMensajeBienvenida(String expectedWelcome) {
+        log.info("✅ Then: validando mensaje de bienvenida '{}'", expectedWelcome);
 
-        Allure.step("Verificar que el dashboard es visible", () -> {
-            Assert.assertTrue(dashboardPage.isDashboardDisplayed(),
-                    "El dashboard no se muestra");
-        });
-    }
-
-    @Entonces("muestra el mensaje de error {string}")
-    @Story("Validación de errores")
-    @Severity(SeverityLevel.NORMAL)
-    public void muestraMensajeError(String mensajeEsperado) {
-        log.info("✅ Then: validando mensaje de error");
-
-        String mensajeActual = Allure.step("Capturar mensaje de error mostrado", () -> {
-            return loginPage.getErrorMessage();
+        String actualWelcome = Allure.step("Capturar mensaje de bienvenida", () -> {
+            return homePage.getWelcomeMessage();
         });
 
-        Allure.step("Validar mensaje esperado: '" + mensajeEsperado + "'", () -> {
-            Assert.assertTrue(mensajeActual.contains(mensajeEsperado),
-                    "Mensaje esperado: '" + mensajeEsperado + "' pero se obtuvo: '" + mensajeActual + "'");
+        Allure.step("Validar mensaje de bienvenida", () -> {
+            Assert.assertTrue(
+                    actualWelcome.contains(expectedWelcome),
+                    "Se esperaba: '" + expectedWelcome + "' pero se obtuvo: '" + actualWelcome + "'");
         });
     }
 }

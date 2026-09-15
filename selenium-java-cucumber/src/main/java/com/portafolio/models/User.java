@@ -1,6 +1,7 @@
 package com.portafolio.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,11 +16,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *   <li>Documenta qué campos tiene un usuario.</li>
  * </ul>
  *
- * <p>Se mapea con Jackson desde {@code users.json}.</p>
+ * <p><b>Campos de runtime:</b> los campos {@code createdAt} y {@code source} se
+ * rellenan cuando el usuario se genera dinámicamente durante la ejecución
+ * (ver {@link com.portafolio.utils.GeneratedUserStore}).</p>
+ *
+ * <p>Se mapea con Jackson desde {@code users.json} y desde
+ * {@code target/generated-users.json}.</p>
  *
  * @author Erick
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     @JsonProperty("username")
@@ -34,14 +41,34 @@ public class User {
     @JsonProperty("role")
     private String role;
 
-    // Constructor vacío requerido por Jackson
+    // ═══════════════════ METADATOS DE RUNTIME ═══════════════════
+
+    /** Timestamp en formato {@code yyyy-MM-dd HH:mm:ss} de la creación del usuario. */
+    @JsonProperty("createdAt")
+    private String createdAt;
+
+    /** Origen del usuario, ej. {@code signup.feature}, {@code users.json}, {@code api}. */
+    @JsonProperty("source")
+    private String source;
+
+    // ═══════════════════ CONSTRUCTORES ═══════════════════
+
+    /** Constructor vacío requerido por Jackson. */
     public User() {
     }
 
-    // Constructor de conveniencia
+    /** Constructor de conveniencia para username + password. */
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    /** Constructor completo para escenarios que requieren todos los campos. */
+    public User(String username, String password, String email, String role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 
     // ═══════════════════ GETTERS ═══════════════════
@@ -50,6 +77,8 @@ public class User {
     public String getPassword() { return password; }
     public String getEmail() { return email; }
     public String getRole() { return role; }
+    public String getCreatedAt() { return createdAt; }
+    public String getSource() { return source; }
 
     // ═══════════════════ SETTERS ═══════════════════
 
@@ -57,7 +86,17 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public void setEmail(String email) { this.email = email; }
     public void setRole(String role) { this.role = role; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setSource(String source) { this.source = source; }
 
+    // ═══════════════════ UTILIDADES ═══════════════════
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p><b>Nota de seguridad:</b> la contraseña no se incluye en la representación
+     * para evitar fugas en logs y reportes.</p>
+     */
     @Override
     public String toString() {
         return "User{username='" + username + "', role='" + role + "'}";
