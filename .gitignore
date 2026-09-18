@@ -1,23 +1,79 @@
+# =====================================================================
+#  GITIGNORE - Selenium Java Cucumber Framework
+# =====================================================================
 
-### 2. .gitignore
-
-```bash
-# Java
+# ---------------------------------------------------------------------
+# BUILD (Maven)
+# ---------------------------------------------------------------------
+target/
+build/
+out/
 *.class
 *.jar
 *.war
 *.ear
-target/
+
+# Reportes generados por tests
+target/surefire-reports/
+target/cucumber-reports/
+target/allure-results/
+target/allure-report/
+target/test-output/
+target/screenshots/
+target/logs/
+
+# Usuarios generados en runtime (dinamicos)
+target/generated-users.json
+
+# ---------------------------------------------------------------------
+# GRID STANDALONE (no versionar binarios)
+# ---------------------------------------------------------------------
+selenium-server-*.jar
+selenium-grid/
+
+# ---------------------------------------------------------------------
+# CONFIGURACION - Secretos (NUNCA versionar)
+# ---------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*secrets*.properties
+*credentials*.properties
+local.properties
+
+# NOTA: Los .properties de configuracion publica
+# (qa.properties, staging.properties, allure.properties)
+# SI se versionan porque NO contienen secretos.
+
+# ---------------------------------------------------------------------
+# IDE - Visual Studio Code
+# ---------------------------------------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# ---------------------------------------------------------------------
+# IDE - IntelliJ IDEA
+# ---------------------------------------------------------------------
 .idea/
 *.iml
 *.iws
 *.ipr
+out/
+
+# ---------------------------------------------------------------------
+# IDE - Eclipse
+# ---------------------------------------------------------------------
 .settings/
 .classpath
 .project
 .metadata/
 
-# Maven
+# ---------------------------------------------------------------------
+# MAVEN
+# ---------------------------------------------------------------------
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -28,28 +84,46 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# Logs
+# ---------------------------------------------------------------------
+# LOGS
+# ---------------------------------------------------------------------
 *.log
 logs/
 
-# Test reports
-target/surefire-reports/
-target/cucumber-reports/
-target/test-output/
+# ---------------------------------------------------------------------
+# SISTEMA OPERATIVO
+# ---------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
 
-# Environment
-*.properties
-.env
-application.properties
-
-# IDE
-.vscode/
+# ---------------------------------------------------------------------
+# EDITORES
+# ---------------------------------------------------------------------
 *.swp
 *.swo
 *~
+*.bak
+*.tmp
+*.orig
 
-# OS
-.DS_Store
-Thumbs.db
+# ---------------------------------------------------------------------
+# DOCKER
+# ---------------------------------------------------------------------
+docker-compose.override.yml
 
-.env
+# ---------------------------------------------------------------------
+# PYTHON (para futuros subproyectos)
+# ---------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+.pytest_cache/
+
+# ---------------------------------------------------------------------
+# NODE (para futuros subproyectos)
+# ---------------------------------------------------------------------
+node_modules/
+package-lock.json
+yarn.lock

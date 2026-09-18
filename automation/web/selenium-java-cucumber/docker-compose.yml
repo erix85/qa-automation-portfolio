@@ -1,0 +1,118 @@
+version: "3.8"
+
+# ═══════════════════════════════════════════════════════════════════
+#  Selenium Grid 4 - Infraestructura de ejecución distribuida
+# ═══════════════════════════════════════════════════════════════════
+#
+#  Comandos útiles:
+#    docker-compose up -d              → Levantar el Grid en background
+#    docker-compose ps                 → Ver estado de los contenedores
+#    docker-compose logs -f            → Ver logs en tiempo real
+#    docker-compose down               → Apagar el Grid
+#    docker-compose down -v            → Apagar y limpiar volúmenes
+#    docker-compose pull               → Actualizar imágenes
+#
+#  UI del Grid: http://localhost:4444/ui
+#
+#  Ejecución de tests:
+#    mvn test "-Dgrid.url=http://localhost:4444"
+#
+#  Ejecución cross-browser:
+#    mvn test "-Dgrid.url=http://localhost:4444" "-Dbrowser=chrome"
+#    mvn test "-Dgrid.url=http://localhost:4444" "-Dbrowser=firefox"
+#    mvn test "-Dgrid.url=http://localhost:4444" "-Dbrowser=edge"
+#
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  # ───────────────────────────────────────────────────────────────
+  # HUB: coordinador central del Grid
+  # ───────────────────────────────────────────────────────────────
+  selenium-hub:
+    image: selenium/hub:4.20.0
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"   # Event Bus - publish
+      - "4443:4443"   # Event Bus - subscribe
+      - "4444:4444"   # WebDriver endpoint + UI
+    environment:
+      - GRID_MAX_SESSION=10
+      - GRID_BROWSER_TIMEOUT=300
+      - GRID_TIMEOUT=300
+      - GRID_CLEAN_UP_CYCLE=5000
+    networks:
+      - selenium-grid
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ───────────────────────────────────────────────────────────────
+  # NODE: Chrome
+  # ───────────────────────────────────────────────────────────────
+  chrome-node:
+    image: selenium/node-chrome:4.20.0
+    container_name: chrome-node
+    depends_on:
+      selenium-hub:
+        condition: service_healthy
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+    shm_size: 2gb
+    networks:
+      - selenium-grid
+    restart: unless-stopped
+
+  # ───────────────────────────────────────────────────────────────
+  # NODE: Firefox
+  # ───────────────────────────────────────────────────────────────
+  firefox-node:
+    image: selenium/node-firefox:4.20.0
+    container_name: firefox-node
+    depends_on:
+      selenium-hub:
+        condition: service_healthy
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+    shm_size: 2gb
+    networks:
+      - selenium-grid
+    restart: unless-stopped
+
+  # ───────────────────────────────────────────────────────────────
+  # NODE: Edge
+  # ───────────────────────────────────────────────────────────────
+  edge-node:
+    image: selenium/node-edge:4.20.0
+    container_name: edge-node
+    depends_on:
+      selenium-hub:
+        condition: service_healthy
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_VNC_NO_PASSWORD=1
+    shm_size: 2gb
+    networks:
+      - selenium-grid
+    restart: unless-stopped
+
+networks:
+  selenium-grid:
+    driver: bridge

@@ -1,0 +1,14 @@
+{
+  "validUser": {
+    "username": "qa_portfolio_demo",
+    "password": "PortfolioDemo2026!",
+    "role": "CUSTOMER",
+    "source": "static"
+  },
+  "invalidUser": {
+    "username": "no_existe_user",
+    "password": "WrongPass123!",
+    "role": "INVALID",
+    "source": "static"
+  }
+}
